@@ -1,20 +1,23 @@
 var parser = require('./parse-cookie');
-var BSON = require('bson');
+var assert = require('assert');
 
-var cookie = "bEtaTXFvOHlCQjliaVBUUi9BMVB6aFcyeHE5MFJ3YjFaZ1ZHREk5anltUWpxMEgwZkczbHN6ZkFHSW84bURCNFpuVmZuMklJUHJWNU0wTnNObG0ybXVhVXNNL25LL3M4U0FGZ3JZQlhSV00yUFgrdU9sVG9mZGNpUkpZRUhTK2xGZ2hOdVdqb0tVZVIvMlZFZWVodllJRm5jWWhrYnhiUHM1bDhHTmx0Uks2WVlCSzBQbm40Vzhxcy90ZWdsMmZ0YkJGYWV5RWk0ZTRJbDlhTDNqNk9HSk9xSklDSk1ScHF6cFUwTUVib3RFWjlha1ZSd0xWc09ZT1VXSTRNc0piaThDZEI2a0MydHF6c2FnbWEyb0EyZjBMTHZ4UDhzcng2Njk4VXV1azNHZTg2RUpKZG9BZ3Z6M1Z4WXhBMkhRNlFoNXROL2dmem44MkFyZml2b1RRNHNKSFArZGhLZDdDTFZ1MzUvYk1Yb29tY04xeXk2VklhazVRdklLeVhvSEtLdnNNSVdkKzJDTWlJd2Mvb3NuQkp5T2FmSlpLR2FqaStBOTM3Yy9hVm4xUG5yS2piWUxMNWZ2UmdEdERSYjR4a0ljUW1KMjIwR3NFSnQ4a2ozeWc1alVZZ1hJczFZTU9xMjJrSnhoZFNUcVJqN0s4UGdwYjBlVlpFVjQ0dGZQMENSU0c5N1d4bEhjQU9HcmVHdXYzeERBPT0tLTNJNnhIN1ljY0xzNFZFa0JMRWJCR1E9PQ==--93c96ef70cb7a6abaea56b1e17426210d5054ea5"
-  , params = {
-      base: 'be128db5c11b7c96ba809417f7c1726ee31a4de29e38dfa3567095caef6404294d34bd136708375e5533f4f139b2a20446084b7b57008086a180d4cdf542d600'
-    , salt: 'encrypted cookie'
-    , signed_salt: 'signed encrypted cookie'
-    , iterations: 1000
-    , keylen: 64
-  }
-  , cipher = 'aes-256-cbc'
-  ;
+var cookie = 'NHUxNFNucmVBVlkrYnVsYWpybjBFeUE5eGpITFBEMnNBUGJaeTJobHl1QjBmUmtGdys2SHBnendHOWFwTTNrOW5UVDNBMnZCVXpYNXRGRDFuSUtvWXkrbjFTcW0vNDRJWmUrL1pnSVlZNVQzdHFuVUlkSHZsTCtyYkhUZ0RqUk5wTWdka2tDRmt4R1VFK2prU1JvUkNNTTh0WXFQQmV5TkZRcllucFJWZmROWWhrdHltRWlvWGhKdEhGZjJjeE9zdjFnM2FTQVBiUjhaMkpITWh2WW9zMUJsdWJ1TW9HU2h2OHpvdmdkTFhNQT0tLWRwdU9kM3NZaEhESHAvazBzYjNzVlE9PQ==--8fb5972c72c3e759131e2c54d29ba390dc377fc4';
+var params = {
+    base: '75d9bd8321ea9483ec94a94d9f6405fcb76f495b716955f4454fada841bbb6c78e6ac21898c22a7de5a0e13d03596d46faf45887dd7eaef606bfeb9b096a2e6b',
+    salt: 'encrypted cookie',
+    signed_salt: 'signed encrypted cookie',
+    iterations: 1000,
+    keylen: 64
+}
+var cipher = 'aes-256-cbc';
 
-decryptor = parser(params);
-message = decryptor(cookie, cipher);
-
-json = BSON.deserialize(message);
-
-console.log(json);
+describe('parser/decryptor', function() {
+    it('decrypts the cookie', function() {
+        var decryptor = parser(params);
+        assert.deepEqual(JSON.parse(decryptor(cookie, cipher)), {
+            "_csrf_token": "hSJ3BEqL827ImkcL4rFpNpLDX+ood6oa3aDBhM5P/Ck=",
+            "session_id": "f7770770677b93e72409d502e9af7103",
+            "warden.user.player.key": [[645], "$2a$10$3AJCpD/.t3AmDmgVsiPq4e"]
+        });
+    });
+});

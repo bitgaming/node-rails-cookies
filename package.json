@@ -4,12 +4,13 @@
   "description": "",
   "main": "parse-cookie.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": "https://github.com/botverse/node-rails-cookies.git",
   "author": "Alfonso de la Osa",
   "license": "MIT",
-  "dependencies": {
-    "bson": "~0.2.0"
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^3.1.2"
   }
 }
